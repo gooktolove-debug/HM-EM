@@ -25,7 +25,23 @@
       body.detail-modal-open{overflow:hidden}
     }
     @media(max-width:900px){.nearest-list{grid-template-columns:1fr}}
-  </style>
+  
+/* ===== Auckland Harbourmaster unified command-centre theme ===== */
+:root{--bg:#06111f;--bg2:#091a2d;--surface:#0d2238;--surface2:#102a43;--text:#eaf5ff;--muted:#8fa8bd;--line:rgba(149,190,219,.18);--accent:#29d3c2;--accent2:#3ea6ff;--shadow:0 24px 60px rgba(0,7,16,.38)}
+html{background:#06111f}body{background:radial-gradient(circle at 78% -10%,rgba(31,132,183,.22),transparent 38rem),radial-gradient(circle at 0 40%,rgba(21,198,179,.08),transparent 34rem),#06111f;color:var(--text);font-family:Inter,"Segoe UI",Arial,sans-serif;min-height:100vh}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.20;background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);background-size:34px 34px}
+.wrap{position:relative;max-width:1800px;padding:24px 30px 48px}
+h1{position:relative;text-align:left;margin:0 0 22px;padding:27px 24px 25px 82px;border:1px solid var(--line);border-radius:20px;background:linear-gradient(135deg,rgba(13,34,56,.96),rgba(8,25,43,.91));box-shadow:var(--shadow);color:#f4fbff;font-size:clamp(28px,3vw,42px);letter-spacing:-.045em}
+h1:before{content:"HM";position:absolute;left:24px;top:50%;display:grid;place-items:center;width:38px;height:38px;transform:translateY(-50%);border:1px solid rgba(41,211,194,.5);border-radius:9px;color:#61f4e5;background:rgba(41,211,194,.09);font-size:12px;letter-spacing:0}
+h1:after{content:"AUCKLAND HARBOURMASTER";display:block;margin-top:7px;color:#8fb4ca;font-size:10px;font-weight:800;letter-spacing:.16em}
+.card{border:1px solid var(--line);background:linear-gradient(145deg,rgba(14,38,61,.96),rgba(8,25,43,.96));box-shadow:var(--shadow);color:var(--text)}
+.stats{gap:20px}.stat{height:126px;border-radius:18px}.stat.available{border-color:rgba(41,211,194,.36)}.stat.occupied{border-color:rgba(255,107,107,.33)}.available .icon{background:rgba(41,211,194,.12);color:#62e9dc}.occupied .icon{background:rgba(239,68,68,.12);color:#ff8b8b}.stat-label,.stat-sub,.hint{color:var(--muted)}.stat-num{color:#f4fbff}
+#map{border-color:var(--line);box-shadow:var(--shadow)}.list-card,.detail{background:linear-gradient(145deg,rgba(14,38,61,.97),rgba(8,25,43,.97))}.list-title{color:#f4fbff}.item{border-color:rgba(111,172,207,.18);background:#0b2941;color:#e8f6ff}.item:hover{border-color:rgba(41,211,194,.42);background:#10344d}.item.selected{border-color:#29d3c2;background:linear-gradient(135deg,#178c88,#0d6a71);color:#fff}.item-meta,.selected .item-meta{color:#9fbccf}.detail h2{color:#f4fbff}.gps-dm{color:#8ef5eb}
+.btn{border:1px solid rgba(95,166,205,.22);border-radius:9px;background:#102d46;color:#cce7f6}.btn:hover{border-color:rgba(41,211,194,.48);background:#143953;color:#8ef5eb}.btn.primary{border-color:#29d3c2;background:linear-gradient(135deg,#178c88,#0d6a71);color:#fff}.btn.blue{border-color:#3ea6ff;background:#176eaa}.btn.green{background:#17865f;border-color:#35d495}.btn.red{background:#b42318;border-color:#ff7168}.form input,.form select,.form textarea{border-color:#294c65;background:#071b2d;color:#eef7ff}.form label{color:#9fbccf}.photo,.history-box{border-color:var(--line);background:rgba(5,20,35,.45)}
+.modal-bg{background:rgba(0,7,16,.72);backdrop-filter:blur(6px)}.modal{border:1px solid #294660;background:#eef5f9;color:#0d2437}.modal .hint{color:#607d90}.photo-viewer{border-color:#294660;background:#06111f}
+@media(max-width:900px){.wrap{padding:10px 9px 34px}h1{padding:21px 18px 20px 68px;border-radius:15px;font-size:28px}h1:before{left:18px;width:34px;height:34px}.detail.mobile-open{background:linear-gradient(145deg,#0e263d,#08192b);color:var(--text)}.detail h2{color:#f4fbff}.form input,.form select,.form textarea{background:#071b2d;color:#eef7ff}.stats{gap:10px}.stat{border-radius:15px}}
+
+</style>
 </head>
 <body>
   <div class="wrap">
