@@ -55,9 +55,27 @@ h1:after{content:"AUCKLAND HARBOURMASTER";display:block;margin-top:7px;color:#8f
     .detail .photo-body{padding:5px;text-align:center}
     .detail .photo-body .hint{font-size:9px;line-height:1.2;white-space:normal}
     .detail .photo-body .btn{font-size:9px;padding:4px 6px;margin-top:4px}
+
+    /* Mobile default full-map mode and map/list toggle */
+    .mobile-map-toggle{display:none}
+    @media(max-width:900px){
+      .mobile-map-toggle{display:flex;position:fixed;top:12px;right:12px;z-index:4300;width:42px;height:42px;padding:0;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.5);border-radius:10px;background:#0e314d;color:#fff;box-shadow:0 4px 14px rgba(0,0,0,.3);font-size:20px;line-height:1}
+      body.mobile-full-map{overflow:hidden}
+      body.mobile-full-map .wrap{max-width:none;margin:0;padding:0;height:100dvh}
+      body.mobile-full-map .wrap>h1,
+      body.mobile-full-map .wrap>.top-actions,
+      body.mobile-full-map .wrap>.stats,
+      body.mobile-full-map .wrap>.nearest,
+      body.mobile-full-map .list-card{display:none!important}
+      body.mobile-full-map .content{display:block!important;margin:0!important;height:100dvh}
+      body.mobile-full-map .left-stack{display:block!important;height:100dvh}
+      body.mobile-full-map #map{width:100vw!important;height:100dvh!important;min-height:100dvh!important;border:0!important;border-radius:0!important;margin:0!important}
+      body:not(.mobile-full-map) .mobile-map-toggle{position:absolute;top:12px;right:12px}
+    }
 </style>
 </head>
 <body>
+  <button id="mobileMapToggle" class="btn mobile-map-toggle" type="button" aria-label="Show dashboard and mooring list" title="Show dashboard and mooring list">▣</button>
   <div class="wrap">
     <h1>Emergency Mooring Board</h1><div class="top-actions"><button id="locateTop" class="btn blue top-location">Current Location</button></div>
     <section class="stats"><div class="card stat available"><div class="icon">⚓</div><div><div class="stat-label">Available Moorings:</div><div id="availableCount" class="stat-num">0</div><div id="availableSub" class="stat-sub">Out of 0 total moorings</div></div></div><div class="card stat occupied"><div class="icon">⛔</div><div><div class="stat-label">Occupied Moorings:</div><div id="occupiedCount" class="stat-num">0</div><div class="stat-sub">Currently attached / in use</div></div></div></section>
@@ -148,7 +166,24 @@ h1:after{content:"AUCKLAND HARBOURMASTER";display:block;margin-top:7px;color:#8f
       document.querySelectorAll(".history-photo-thumb").forEach(img=>img.onclick=()=>openPhotoModal(img.dataset.src,img.dataset.date));
       $("historyModal").style.display="flex"
     }
-    $("locateBtn").onclick=locate;if($("locateTop"))$("locateTop").onclick=locate;$("closeHistory").onclick=()=>$("historyModal").style.display="none";$("historyModal").onclick=e=>{if(e.target===$("historyModal"))$("historyModal").style.display="none"};$("closePhoto").onclick=closePhotoModal;$("photoModal").onclick=e=>{if(e.target===$("photoModal"))closePhotoModal()};$("zoomIn").onclick=()=>setPhotoZoom(photoZoom+.25);$("zoomOut").onclick=()=>setPhotoZoom(photoZoom-.25);$("zoomReset").onclick=()=>setPhotoZoom(1);$("photoViewer").ondblclick=()=>setPhotoZoom(photoZoom>1.01?1:2);$("photoViewer").addEventListener("wheel",e=>{if($("photoModal").style.display!=="flex")return;e.preventDefault();setPhotoZoom(photoZoom+(e.deltaY<0?.15:-.15))},{passive:false});document.addEventListener("keydown",e=>{if($("photoModal").style.display==="flex"){if(e.key==="Escape")closePhotoModal();if(e.key==="+"||e.key==="=")setPhotoZoom(photoZoom+.25);if(e.key==="-"||e.key==="_")setPhotoZoom(photoZoom-.25);if(e.key==="0")setPhotoZoom(1);return}if(e.key==="Escape"&&document.body.classList.contains("detail-modal-open"))closeDetailModal()});$("detail").addEventListener("click",e=>{if(isMobile()&&e.target===$("detail"))closeDetailModal()});initMap();loadData();
+    function setMobileFullMap(enabled){
+      if(!isMobile())enabled=false;
+      document.body.classList.toggle("mobile-full-map",enabled);
+      const btn=$("mobileMapToggle");
+      if(btn){
+        btn.textContent=enabled?"▣":"⛶";
+        btn.setAttribute("aria-label",enabled?"Show dashboard and mooring list":"Show full map");
+        btn.title=enabled?"Show dashboard and mooring list":"Show full map";
+      }
+      setTimeout(()=>{if(s.map)s.map.invalidateSize()},80);
+    }
+    function toggleMobileMap(){setMobileFullMap(!document.body.classList.contains("mobile-full-map"))}
+    if($("mobileMapToggle"))$("mobileMapToggle").onclick=toggleMobileMap;
+    window.addEventListener("resize",()=>{
+      if(!isMobile())document.body.classList.remove("mobile-full-map");
+      setTimeout(()=>{if(s.map)s.map.invalidateSize()},80)
+    });
+    $("locateBtn").onclick=locate;if($("locateTop"))$("locateTop").onclick=locate;$("closeHistory").onclick=()=>$("historyModal").style.display="none";$("historyModal").onclick=e=>{if(e.target===$("historyModal"))$("historyModal").style.display="none"};$("closePhoto").onclick=closePhotoModal;$("photoModal").onclick=e=>{if(e.target===$("photoModal"))closePhotoModal()};$("zoomIn").onclick=()=>setPhotoZoom(photoZoom+.25);$("zoomOut").onclick=()=>setPhotoZoom(photoZoom-.25);$("zoomReset").onclick=()=>setPhotoZoom(1);$("photoViewer").ondblclick=()=>setPhotoZoom(photoZoom>1.01?1:2);$("photoViewer").addEventListener("wheel",e=>{if($("photoModal").style.display!=="flex")return;e.preventDefault();setPhotoZoom(photoZoom+(e.deltaY<0?.15:-.15))},{passive:false});document.addEventListener("keydown",e=>{if($("photoModal").style.display==="flex"){if(e.key==="Escape")closePhotoModal();if(e.key==="+"||e.key==="=")setPhotoZoom(photoZoom+.25);if(e.key==="-"||e.key==="_")setPhotoZoom(photoZoom-.25);if(e.key==="0")setPhotoZoom(1);return}if(e.key==="Escape"&&document.body.classList.contains("detail-modal-open"))closeDetailModal()});$("detail").addEventListener("click",e=>{if(isMobile()&&e.target===$("detail"))closeDetailModal()});initMap();setMobileFullMap(isMobile());loadData();
   </script>
 </body>
 </html>
